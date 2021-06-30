@@ -1,5 +1,6 @@
 package com.projet.pvc.controllers;
 
+import com.projet.pvc.entities.Caissier;
 import com.projet.pvc.repository.CaissierRepository;
 import com.projet.pvc.utils.AlertBox;
 import com.projet.pvc.utils.Provider;
@@ -23,7 +24,7 @@ public class LoginCaissierController {
     private CaissierRepository caissierRepository;
 
     @FXML
-    AnchorPane window;
+    private AnchorPane window;
 
     @FXML
     private TextField login;
@@ -31,7 +32,7 @@ public class LoginCaissierController {
     @FXML
     private PasswordField password;
 
-    public void connect(ActionEvent actionEvent) {
+    public void connect() {
         Provider.setCaissier(caissierRepository.findCaissierByLoginAndPassword(login.getText(),password.getText()));
         if (Provider.getCaissier() == null) {
             AlertBox.showAlertBox("Erreur", "Login ou mot de passe incorrect !", Alert.AlertType.ERROR);
@@ -40,8 +41,7 @@ public class LoginCaissierController {
         } else Rooter.goTo(window, "/menu_caissier.fxml");
     }
 
-    @FXML
-    void onExit() {
+    public void onExit() {
         Rooter.exitApp(window);
     }
 
