@@ -23,6 +23,9 @@ public class Vente implements Serializable {
     @Column(name = "terminee", nullable = false)
     private Integer terminee;
 
+    @Column(name = "total")
+    private float total;
+
     @OneToMany(mappedBy = "vente", cascade = CascadeType.ALL)
     private List<LigneDeVente> listeLigneDeVente = new ArrayList<>();
 
@@ -58,12 +61,21 @@ public class Vente implements Serializable {
         this.listeLigneDeVente = listeLigneDeVente;
     }
 
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
     @Override
     public String toString() {
         return "Vente{" +
-                "id=" + id + '\'' +
-                "date=" + date + '\'' +
-                "terminee=" + terminee + '\'' +
+                "id=" + id +
+                ", date=" + date +
+                ", terminee=" + terminee +
+                ", total=" + total +
                 '}';
     }
 }
