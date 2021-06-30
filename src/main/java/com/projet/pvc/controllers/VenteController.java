@@ -4,14 +4,18 @@ import com.projet.pvc.entities.Article;
 import com.projet.pvc.entities.LigneDeVente;
 import com.projet.pvc.entities.Vente;
 import com.projet.pvc.repository.ArticleRepository;
+import com.projet.pvc.tableview_models.LigneDeVenteTableView;
 import com.projet.pvc.utils.Provider;
 import com.projet.pvc.utils.Rooter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,7 +57,25 @@ public class VenteController implements Initializable {
     private Button btnAddToCart;
 
     @FXML
-    private TableView<?> listeProduits;
+    private TableView listeLigneDeVente;
+
+    @FXML
+    private TableColumn<LigneDeVenteTableView, String> cpuColumn;
+
+    @FXML
+    private TableColumn<LigneDeVenteTableView, String> libelleColumn;
+
+    @FXML
+    private TableColumn<LigneDeVenteTableView, Integer> prixColumn;
+
+    @FXML
+    private TableColumn<LigneDeVenteTableView, Integer> qtColumn;
+
+    @FXML
+    private TableColumn<LigneDeVenteTableView, Integer> stColumn;
+
+    @FXML
+    private TableColumn<LigneDeVenteTableView, Button> actionColumn;
 
     @FXML
     private TextField total;
@@ -70,6 +92,8 @@ public class VenteController implements Initializable {
     @FXML
     private Button btnAnnuler;
 
+    final ObservableList<LigneDeVenteTableView> lignes = FXCollections.observableArrayList();
+
     public void addToCart(ActionEvent event) {
         Article article = comboBoxProduits.getValue();
         if(article != null && article.getDescription() != null){
@@ -83,12 +107,42 @@ public class VenteController implements Initializable {
             System.out.println(vente);
             clearField();
         }
+        showInTableView();
     }
+
+    void showInTableView() {
+        cpuColumn.setCellValueFactory(new PropertyValueFactory<LigneDeVenteTableView, String >("cpu"));
+        libelleColumn.setCellValueFactory(new PropertyValueFactory<LigneDeVenteTableView, String >("libelle"));
+        prixColumn.setCellValueFactory(new PropertyValueFactory<LigneDeVenteTableView, Integer >("prix"));
+        qtColumn.setCellValueFactory(new PropertyValueFactory<LigneDeVenteTableView, Integer >("quantite"));
+        stColumn.setCellValueFactory(new PropertyValueFactory<LigneDeVenteTableView, Integer >("sousTotal"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<LigneDeVenteTableView, Button>("deleteButton"));
+        lignes.clear();
+        Provider.getVente().getListeLigneDeVente().forEach(ligneDeVente -> {
+            LigneDeVenteTableView ligne = new LigneDeVenteTableView(
+                    ligneDeVente.getArticle().getDescription().getCpu(),
+                    ligneDeVente.getArticle().getLibelle(),
+                    ligneDeVente.getArticle().getDescription().getPrix(),
+                    ligneDeVente.getQt(),
+                    ligneDeVente.getSousTotal(),
+                    new Button("Supprimer")
+            );
+
+            ligne.getDeleteButton().setOnAction(actionEvent -> {
+                Provider.getVente().getListeLigneDeVente().remove(ligneDeVente);
+                showInTableView();
+            });
+
+            lignes.add(ligne);
+        });
+        listeLigneDeVente.setItems(lignes);
+    }
+
     void clearField(){
         comboBoxProduits.setValue(new Article());
         libelleProduit.setText("");
         prix.setText("");
-        spinnerQte.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,0,0));
+        spinnerQte.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,1,0));
         qteDispo.setText("");
     }
 
