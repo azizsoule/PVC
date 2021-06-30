@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface CaissierRepository extends JpaRepository<Caissier, Integer>, JpaSpecificationExecutor<Caissier> {
-    boolean existsByLoginAndPassword(String login, String password);
+    Caissier findCaissierByLoginAndPassword(String login, String password);
 }

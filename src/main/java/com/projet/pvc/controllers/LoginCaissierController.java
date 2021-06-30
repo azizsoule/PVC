@@ -1,8 +1,12 @@
 package com.projet.pvc.controllers;
 
 import com.projet.pvc.repository.CaissierRepository;
+import com.projet.pvc.utils.AlertBox;
+import com.projet.pvc.utils.Provider;
+import com.projet.pvc.utils.Rooter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -28,14 +32,17 @@ public class LoginCaissierController {
     private PasswordField password;
 
     public void connect(ActionEvent actionEvent) {
-        if(caissierRepository.existsByLoginAndPassword(login.getText(),password.getText())) System.out.println("connecté");
-        else System.out.println("non connecté");
+        Provider.setCaissier(caissierRepository.findCaissierByLoginAndPassword(login.getText(),password.getText()));
+        if (Provider.getCaissier() == null) {
+            AlertBox.showAlertBox("Erreur", "Login ou mot de passe incorrect !", Alert.AlertType.ERROR);
+            login.clear();
+            password.clear();
+        } else Rooter.goTo(window, "/menu_caissier.fxml");
     }
 
     @FXML
     void onExit() {
-        Stage stage = (Stage) window.getScene().getWindow();
-        stage.close();
+        Rooter.exitApp(window);
     }
 
 }
