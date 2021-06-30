@@ -4,6 +4,7 @@ import com.projet.pvc.entities.Article;
 import com.projet.pvc.entities.LigneDeVente;
 import com.projet.pvc.entities.Vente;
 import com.projet.pvc.repository.ArticleRepository;
+import com.projet.pvc.repository.PvcRepository;
 import com.projet.pvc.tableview_models.LigneDeVenteTableView;
 import com.projet.pvc.repository.VenteRepository;
 import com.projet.pvc.utils.AlertBox;
@@ -32,6 +33,8 @@ public class VenteController implements Initializable {
     private ArticleRepository repository;
     @Autowired
     private VenteRepository venteRepository;
+    @Autowired
+    private PvcRepository pvcRepository;
 
     @FXML
     AnchorPane window;
@@ -114,8 +117,8 @@ public class VenteController implements Initializable {
             vente.setTotal(tot);
             ligneDeVente.setVente(vente);
             clearField();
+            showInTableView();
         }
-        showInTableView();
     }
 
     void showInTableView() {
@@ -137,7 +140,9 @@ public class VenteController implements Initializable {
             );
 
             ligne.getDeleteButton().setOnAction(actionEvent -> {
+                Provider.getVente().setTotal(Provider.getVente().getTotal() - ligneDeVente.getSousTotal());
                 Provider.getVente().getListeLigneDeVente().remove(ligneDeVente);
+                total.setText(""+Provider.getVente().getTotal());
                 showInTableView();
             });
 
@@ -160,19 +165,26 @@ public class VenteController implements Initializable {
     }
 
     public void terminerVente(ActionEvent event) {
-        Vente vente = Provider.getVente();
-        System.out.println(vente);
-        int payer = Integer.parseInt(paye.getText());
-        if(payer >= vente.getTotal()){
-            vente.setTerminee(1);
-            Vente savedVente = venteRepository.save(vente);
-            int monnaie = (int) (payer - savedVente.getTotal());
-            rendu.setText(""+monnaie);
-        }else {
-            AlertBox.showAlertBox("Erreur", "Le montant entré est inférieur au total !", Alert.AlertType.ERROR);
-            paye.clear();
+        if (paye.getText().isEmpty()) {
+            AlertBox.showAlertBox("Erreur", "Veuillez renseigner le montant payé svp !", Alert.AlertType.ERROR);
+        } else {
+            Vente vente = Provider.getVente();
+            System.out.println(vente);
+            int payer = Integer.parseInt(paye.getText());
+            if(payer >= vente.getTotal()) {
+                vente.setTerminee(1);
+                Vente savedVente = venteRepository.save(vente);
+                int monnaie = (int) (payer - savedVente.getTotal());
+                rendu.setText(""+monnaie);
+                Provider.getPvc().setSolde(Provider.getPvc().getSolde() + (int) vente.getTotal());
+                pvcRepository.save(Provider.getPvc());
+                annulerVente(event);
+                AlertBox.showAlertBox("Info", "la vente a été éffectuée avec succès !", Alert.AlertType.INFORMATION);
+            } else {
+                AlertBox.showAlertBox("Erreur", "Le montant payé est inférieur au total !", Alert.AlertType.ERROR);
+                paye.clear();
+            }
         }
-
     }
 
     @Override

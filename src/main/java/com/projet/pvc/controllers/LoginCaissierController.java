@@ -2,6 +2,7 @@ package com.projet.pvc.controllers;
 
 import com.projet.pvc.entities.Caissier;
 import com.projet.pvc.repository.CaissierRepository;
+import com.projet.pvc.repository.PvcRepository;
 import com.projet.pvc.utils.AlertBox;
 import com.projet.pvc.utils.Provider;
 import com.projet.pvc.utils.Rooter;
@@ -26,6 +27,9 @@ public class LoginCaissierController implements Initializable {
     @Autowired
     private CaissierRepository caissierRepository;
 
+    @Autowired
+    private PvcRepository pvcRepository;
+
     @FXML
     private AnchorPane window;
 
@@ -41,7 +45,11 @@ public class LoginCaissierController implements Initializable {
             AlertBox.showAlertBox("Erreur", "Login ou mot de passe incorrect !", Alert.AlertType.ERROR);
             login.clear();
             password.clear();
-        } else Rooter.goTo(window, "/menu_caissier.fxml");
+        } else {
+            Provider.setPvc(!pvcRepository.findAll().isEmpty() ? pvcRepository.findAll().get(0) : null);
+            if (Provider.getPvc() == null) AlertBox.showAlertBox("Erreur", "Aucun PVC disponible dans la base de données !", Alert.AlertType.ERROR);
+            else Rooter.goTo(window, "/menu_caissier.fxml");
+        }
     }
 
     public void onExit() {
@@ -50,7 +58,7 @@ public class LoginCaissierController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        login.setText("caissier");
-        password.setText("123456");
+        login.setText("caisse");
+        password.setText("caisse");
     }
 }

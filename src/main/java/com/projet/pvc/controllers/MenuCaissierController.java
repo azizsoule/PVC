@@ -2,6 +2,7 @@ package com.projet.pvc.controllers;
 
 import com.projet.pvc.entities.Vente;
 import com.projet.pvc.repository.VenteRepository;
+import com.projet.pvc.utils.AlertBox;
 import com.projet.pvc.utils.Provider;
 import com.projet.pvc.utils.Rooter;
 import javafx.fxml.FXML;
@@ -20,7 +21,9 @@ public class MenuCaissierController {
     AnchorPane window;
 
     public void onExit() {
-        Rooter.exitApp(window);
+        AlertBox.showAlertBox("?", "Le solde de la caisse est t-il correct ? \n"+Provider.getPvc().getSolde()+" FCFA", () -> {
+            Rooter.exitApp(window);
+        });
     }
 
     public void onNewVente() {

@@ -24,10 +24,9 @@ public class AlertBox {
         alertBox.setContentText(message);
         alertBox.showAndWait().ifPresent(
                 pressedButton -> {
+                    alertBox.close();
                     if (pressedButton == ButtonType.OK) {
                         whenOk.apply();
-                    }else {
-                        alertBox.close();
                     }
                 }
         );
@@ -35,8 +34,3 @@ public class AlertBox {
 
 }
 
-interface Function {
-
-    void apply();
-
-}
