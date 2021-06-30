@@ -63,11 +63,6 @@ public class Article implements Serializable {
 
     @Override
     public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", libelle='" + libelle + '\'' +
-                ", qt=" + qt +
-                ", description=" + description.getDescription() +
-                '}';
+        return  description!=null && description.getCpu()!=null ? description.getCpu():"";
     }
 }

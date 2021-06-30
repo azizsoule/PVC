@@ -7,6 +7,7 @@ import com.projet.pvc.utils.Provider;
 import com.projet.pvc.utils.Rooter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 @Component
-public class LoginCaissierController {
+public class LoginCaissierController implements Initializable {
 
     @Autowired
     private CaissierRepository caissierRepository;
@@ -45,4 +48,9 @@ public class LoginCaissierController {
         Rooter.exitApp(window);
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        login.setText("caissier");
+        password.setText("123456");
+    }
 }
