@@ -24,7 +24,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="20.0" layoutY="239.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="315.0" text="Connexion">
+      <Button layoutX="20.0" layoutY="239.0" mnemonicParsing="false" onAction="#connect" prefHeight="33.0" prefWidth="315.0" text="Connexion">
          <font>
             <Font size="15.0" />
          </font>
