@@ -4,6 +4,8 @@ import com.projet.pvc.entities.Article;
 import com.projet.pvc.entities.LigneDeVente;
 import com.projet.pvc.entities.Vente;
 import com.projet.pvc.repository.ArticleRepository;
+import com.projet.pvc.repository.VenteRepository;
+import com.projet.pvc.utils.AlertBox;
 import com.projet.pvc.utils.Provider;
 import com.projet.pvc.utils.Rooter;
 import javafx.beans.value.ChangeListener;
@@ -24,6 +26,8 @@ public class VenteController implements Initializable {
 
     @Autowired
     private ArticleRepository repository;
+    @Autowired
+    private VenteRepository venteRepository;
 
     @FXML
     AnchorPane window;
@@ -79,8 +83,12 @@ public class VenteController implements Initializable {
             ligneDeVente.setQt(qte);
             ligneDeVente.setSousTotal(qte*Integer.parseInt(prix.getText()));
             Vente vente = Provider.getVente();
+            float tot = vente.getTotal();
+            tot+= ligneDeVente.getSousTotal();
+            total.setText(""+tot);
             vente.getListeLigneDeVente().add(ligneDeVente);
-            System.out.println(vente);
+            vente.setTotal(tot);
+            ligneDeVente.setVente(vente);
             clearField();
         }
     }
@@ -88,7 +96,7 @@ public class VenteController implements Initializable {
         comboBoxProduits.setValue(new Article());
         libelleProduit.setText("");
         prix.setText("");
-        spinnerQte.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,0,0));
+        spinnerQte.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,1,0));
         qteDispo.setText("");
     }
 
@@ -97,8 +105,19 @@ public class VenteController implements Initializable {
         Rooter.goTo(window, "/menu_caissier.fxml");
     }
 
-    @FXML
-    void terminerVente(ActionEvent event) {
+    public void terminerVente(ActionEvent event) {
+        Vente vente = Provider.getVente();
+        System.out.println(vente);
+        int payer = Integer.parseInt(paye.getText());
+        if(payer >= vente.getTotal()){
+            vente.setTerminee(1);
+            Vente savedVente = venteRepository.save(vente);
+            int monnaie = (int) (payer - savedVente.getTotal());
+            rendu.setText(""+monnaie);
+        }else {
+            AlertBox.showAlertBox("Erreur", "Le montant entré est inférieur au total !", Alert.AlertType.ERROR);
+            paye.clear();
+        }
 
     }
 
