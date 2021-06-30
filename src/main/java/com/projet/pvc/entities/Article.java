@@ -20,8 +20,9 @@ public class Article implements Serializable {
     @Column(name = "qt", nullable = false)
     private Integer qt;
 
-    @Column(name = "id_descrip", nullable = false)
-    private Integer idDescrip;
+    @OneToOne
+    @JoinColumn(name = "id_descrip", nullable = false)
+    private DescriptionArticle description;
 
     public void setId(Integer id) {
         this.id = id;
@@ -47,21 +48,21 @@ public class Article implements Serializable {
         return qt;
     }
 
-    public void setIdDescrip(Integer idDescrip) {
-        this.idDescrip = idDescrip;
+    public DescriptionArticle getDescription() {
+        return description;
     }
 
-    public Integer getIdDescrip() {
-        return idDescrip;
+    public void setDescription(DescriptionArticle description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
         return "Article{" +
-                "id=" + id + '\'' +
-                "libelle=" + libelle + '\'' +
-                "qt=" + qt + '\'' +
-                "idDescrip=" + idDescrip + '\'' +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                ", qt=" + qt +
+                ", description=" + description.getDescription() +
                 '}';
     }
 }

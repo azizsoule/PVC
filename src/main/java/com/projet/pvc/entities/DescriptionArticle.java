@@ -2,6 +2,8 @@ package com.projet.pvc.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "description_article")
@@ -23,8 +25,13 @@ public class DescriptionArticle implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "id_article", nullable = false)
-    private Integer idArticle;
+    @OneToOne(mappedBy = "description")
+    @JoinColumn(name = "id_article", nullable = false)
+    private Article article;
+
+    @OneToMany(mappedBy = "description")
+    private List<LigneDeVente> ligneDeVenteList = new ArrayList<>();
+
 
     public void setId(Integer id) {
         this.id = id;
@@ -58,22 +65,26 @@ public class DescriptionArticle implements Serializable {
         return description;
     }
 
-    public void setIdArticle(Integer idArticle) {
-        this.idArticle = idArticle;
+    public Article getArticle() {
+        return article;
     }
 
-    public Integer getIdArticle() {
-        return idArticle;
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public List<LigneDeVente> getLigneDeVenteList() {
+        return ligneDeVenteList;
     }
 
     @Override
     public String toString() {
         return "DescriptionArticle{" +
-                "id=" + id + '\'' +
-                "cpu=" + cpu + '\'' +
-                "prix=" + prix + '\'' +
-                "description=" + description + '\'' +
-                "idArticle=" + idArticle + '\'' +
+                "id=" + id +
+                ", cpu='" + cpu + '\'' +
+                ", prix=" + prix +
+                ", description='" + description + '\'' +
+                ", article=" + article.getLibelle() +
                 '}';
     }
 }

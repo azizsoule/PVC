@@ -2,7 +2,9 @@ package com.projet.pvc.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "vente")
@@ -20,6 +22,9 @@ public class Vente implements Serializable {
 
     @Column(name = "terminee", nullable = false)
     private Integer terminee;
+
+    @OneToMany(mappedBy = "vente", cascade = CascadeType.ALL)
+    private List<LigneDeVente> listeLigneDeVente = new ArrayList<>();
 
     public void setId(Integer id) {
         this.id = id;
@@ -43,6 +48,14 @@ public class Vente implements Serializable {
 
     public Integer getTerminee() {
         return terminee;
+    }
+
+    public List<LigneDeVente> getListeLigneDeVente() {
+        return listeLigneDeVente;
+    }
+
+    public void setListeLigneDeVente(List<LigneDeVente> listeLigneDeVente) {
+        this.listeLigneDeVente = listeLigneDeVente;
     }
 
     @Override

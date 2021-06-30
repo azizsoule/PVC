@@ -20,11 +20,13 @@ public class LigneDeVente implements Serializable {
     @Column(name = "sous_total", nullable = false)
     private Integer sousTotal;
 
-    @Column(name = "id_descrip", nullable = false)
-    private Integer idDescrip;
+    @ManyToOne
+    @JoinColumn(name = "id_descrip", nullable = false)
+    private DescriptionArticle description;
 
-    @Column(name = "id_vente", nullable = false)
-    private Integer idVente;
+    @ManyToOne
+    @JoinColumn(name = "id_vente", nullable = false)
+    private Vente vente;
 
     public void setId(Integer id) {
         this.id = id;
@@ -50,30 +52,30 @@ public class LigneDeVente implements Serializable {
         return sousTotal;
     }
 
-    public void setIdDescrip(Integer idDescrip) {
-        this.idDescrip = idDescrip;
+    public DescriptionArticle getDescription() {
+        return description;
     }
 
-    public Integer getIdDescrip() {
-        return idDescrip;
+    public void setDescription(DescriptionArticle description) {
+        this.description = description;
     }
 
-    public void setIdVente(Integer idVente) {
-        this.idVente = idVente;
+    public Vente getVente() {
+        return vente;
     }
 
-    public Integer getIdVente() {
-        return idVente;
+    public void setVente(Vente vente) {
+        this.vente = vente;
     }
 
     @Override
     public String toString() {
         return "LigneDeVente{" +
-                "id=" + id + '\'' +
-                "qt=" + qt + '\'' +
-                "sousTotal=" + sousTotal + '\'' +
-                "idDescrip=" + idDescrip + '\'' +
-                "idVente=" + idVente + '\'' +
+                "id=" + id +
+                ", qt=" + qt +
+                ", sousTotal=" + sousTotal +
+                ", description=" + description +
+                ", vente=" + vente.getId() +
                 '}';
     }
 }
