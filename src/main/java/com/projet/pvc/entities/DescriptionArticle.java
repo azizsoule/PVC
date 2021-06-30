@@ -26,12 +26,7 @@ public class DescriptionArticle implements Serializable {
     private String description;
 
     @OneToOne(mappedBy = "description")
-    @JoinColumn(name = "id_article", nullable = false)
     private Article article;
-
-    @OneToMany(mappedBy = "description")
-    private List<LigneDeVente> ligneDeVenteList = new ArrayList<>();
-
 
     public void setId(Integer id) {
         this.id = id;
@@ -73,9 +68,7 @@ public class DescriptionArticle implements Serializable {
         this.article = article;
     }
 
-    public List<LigneDeVente> getLigneDeVenteList() {
-        return ligneDeVenteList;
-    }
+
 
     @Override
     public String toString() {

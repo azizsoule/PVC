@@ -17,12 +17,12 @@ public class LigneDeVente implements Serializable {
     @Column(name = "qt", nullable = false)
     private Integer qt;
 
-    @Column(name = "sous_total", nullable = false)
+    @Column(name = "sous_total", nullable = true)
     private Integer sousTotal;
 
     @ManyToOne
-    @JoinColumn(name = "id_descrip", nullable = false)
-    private DescriptionArticle description;
+    @JoinColumn(name = "id_article", nullable = false)
+    private Article article;
 
     @ManyToOne
     @JoinColumn(name = "id_vente", nullable = false)
@@ -52,12 +52,12 @@ public class LigneDeVente implements Serializable {
         return sousTotal;
     }
 
-    public DescriptionArticle getDescription() {
-        return description;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setDescription(DescriptionArticle description) {
-        this.description = description;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
     public Vente getVente() {
@@ -74,8 +74,8 @@ public class LigneDeVente implements Serializable {
                 "id=" + id +
                 ", qt=" + qt +
                 ", sousTotal=" + sousTotal +
-                ", description=" + description +
-                ", vente=" + vente.getId() +
+                ", article=" + article +
+                ", vente=" + vente +
                 '}';
     }
 }

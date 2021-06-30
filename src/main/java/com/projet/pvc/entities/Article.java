@@ -2,6 +2,8 @@ package com.projet.pvc.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "article")
@@ -23,6 +25,9 @@ public class Article implements Serializable {
     @OneToOne
     @JoinColumn(name = "id_descrip", nullable = false)
     private DescriptionArticle description;
+
+    @OneToMany(mappedBy = "article")
+    private List<LigneDeVente> ligneDeVenteList = new ArrayList<>();
 
     public void setId(Integer id) {
         this.id = id;
