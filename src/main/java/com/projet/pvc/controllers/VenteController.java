@@ -5,12 +5,14 @@ import com.projet.pvc.entities.LigneDeVente;
 import com.projet.pvc.entities.Vente;
 import com.projet.pvc.repository.ArticleRepository;
 import com.projet.pvc.utils.Provider;
+import com.projet.pvc.utils.Rooter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,9 @@ public class VenteController implements Initializable {
 
     @Autowired
     private ArticleRepository repository;
+
+    @FXML
+    AnchorPane window;
 
     @FXML
     private TextField dateVente;
@@ -89,7 +94,7 @@ public class VenteController implements Initializable {
 
     @FXML
     void annulerVente(ActionEvent event) {
-
+        Rooter.goTo(window, "/menu_caissier.fxml");
     }
 
     @FXML
@@ -105,15 +110,12 @@ public class VenteController implements Initializable {
         repository.findAll().forEach(article -> {
             comboBoxProduits.getItems().add(article);
         });
-        comboBoxProduits.valueProperty().addListener(new ChangeListener<Article>() {
-            @Override
-            public void changed(ObservableValue<? extends Article> observable, Article oldValue, Article newValue) {
-                if(newValue.getDescription() !=null){
-                    libelleProduit.setText(newValue.getLibelle());
-                    prix.setText(newValue.getDescription().getPrix().toString());
-                    spinnerQte.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,Integer.parseInt(newValue.getQt().toString()),1));
-                    qteDispo.setText(newValue.getQt().toString());
-                }
+        comboBoxProduits.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.getDescription() !=null) {
+                libelleProduit.setText(newValue.getLibelle());
+                prix.setText(newValue.getDescription().getPrix().toString());
+                spinnerQte.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,Integer.parseInt(newValue.getQt().toString()),1));
+                qteDispo.setText(newValue.getQt().toString());
             }
         });
 
