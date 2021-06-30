@@ -25,7 +25,7 @@ public class Database {
 
     //Constructeur
     private Database() {
-
+        url = url + "";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, Constants.DB_USER, Constants.DB_PASSWORD);
