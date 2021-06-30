@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface VenteRepository extends JpaRepository<Vente, Integer>, JpaSpecificationExecutor<Vente> {
-
+    Vente findById(int id);
 }

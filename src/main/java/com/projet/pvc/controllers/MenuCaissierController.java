@@ -1,9 +1,11 @@
 package com.projet.pvc.controllers;
 
 import com.projet.pvc.entities.Vente;
+import com.projet.pvc.repository.ArticleRepository;
 import com.projet.pvc.repository.VenteRepository;
 import com.projet.pvc.utils.Provider;
 import com.projet.pvc.utils.Rooter;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 @Component
 public class MenuCaissierController {
+    @Autowired
+    private VenteRepository venteRepository;
 
     @FXML
     AnchorPane window;
@@ -21,13 +25,11 @@ public class MenuCaissierController {
         Rooter.exitApp(window);
     }
 
-    public void onNewVente() {
+    public void onNewVente(ActionEvent actionEvent) {
         Vente vente = new Vente();
         vente.setDate(new Date());
         vente.setTerminee(0);
-        //venteRepository.save(vente);
-        //Provider.setVente(venteRepository.save(vente););
-        Rooter.goTo(window,"/vente.fxml");
+        Provider.setVente(venteRepository.save(vente));
+        Rooter.goTo(window, "/vente.fxml");
     }
-
 }

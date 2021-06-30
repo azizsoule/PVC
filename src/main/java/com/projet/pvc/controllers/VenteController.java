@@ -77,6 +77,8 @@ public class VenteController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        repository.findAll().forEach(article -> {});
+        repository.findAll().forEach(article -> {
+            comboBoxProduits.setValue(article);
+        });
     }
 }
